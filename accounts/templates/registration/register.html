@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Crear Cuenta</h2>
+
+  {% if form.errors %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+      <p class="font-bold">Por favor corrija los siguientes errores:</p>
+      <ul class="list-disc pl-5">
+        {% for field in form %}
+          {% for error in field.errors %}
+            <li>{{ field.label }}: {{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+
+    <div>
+      <label for="id_username" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+      <input type="text" name="username" id="id_username" required
+             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      <p class="mt-1 text-xs text-gray-500">Requerido. 150 caracteres o menos. Solo letras, dígitos y @/./+/-/_.</p>
+    </div>
+
+    <div>
+      <label for="id_email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+      <input type="email" name="email" id="id_email" required
+             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+
+    <div>
+      <label for="id_password1" class="block text-sm font-medium text-gray-700">Contraseña</label>
+      <input type="password" name="password1" id="id_password1" required
+             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      <ul class="mt-1 text-xs text-gray-500 space-y-1">
+        <li>Su contraseña no puede ser similar a su otra información personal.</li>
+        <li>Su contraseña debe contener al menos 8 caracteres.</li>
+        <li>Su contraseña no puede ser una contraseña comúnmente utilizada.</li>
+        <li>Su contraseña no puede ser completamente numérica.</li>
+      </ul>
+    </div>
+
+    <div>
+      <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
+      <input type="password" name="password2" id="id_password2" required
+             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      <p class="mt-1 text-xs text-gray-500">Introduzca la misma contraseña que antes, para verificación.</p>
+    </div>
+
+    <div>
+      <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Registrarse
+      </button>
+    </div>
+
+    <div class="text-sm text-center">
+      <p>¿Ya tienes cuenta? <a href="{% url 'login' %}" class="font-medium text-indigo-600 hover:text-indigo-500">Iniciar sesión</a></p>
+    </div>
+  </form>
+{% endblock %}
