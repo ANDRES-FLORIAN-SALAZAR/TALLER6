@@ -26,15 +26,16 @@ class FormularioEliminar(forms.Form):
         datos_limpiados = super().clean()
         usuario = datos_limpiados.get("usuario")
         contraseña = datos_limpiados.get("contraseña")
-    
-    ## Verificar si el usuario existe y si la contraseña es correcta    
+        
+        # Verificar si el usuario existe y si la contraseña es correcta    
         if not User.objects.filter(username=usuario).exists():
             raise forms.ValidationError("El usuario no existe.")
-    
-    ## Verificar si la contraseña es correcta    
+        
+        # Verificar si la contraseña es correcta    
         usuario_obj = User.objects.get(username=usuario)
         if not usuario_obj.check_password(contraseña):
             raise forms.ValidationError("Contraseña incorrecta.")
+        
         return datos_limpiados
     
     ## Guardar el usuario eliminado
