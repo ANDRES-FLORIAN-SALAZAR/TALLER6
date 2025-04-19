@@ -1,89 +1,63 @@
-# Taller DB
+Proyecto de Auditoría de Operaciones en Usuarios
+Descripción del Proyecto
+Este proyecto implementa un sistema de auditoría para la tabla principal usuarios, mediante la creación de tablas históricas (_log) y triggers en la base de datos. Las tablas históricas registran datos sobre operaciones realizadas, como inserciones, actualizaciones y eliminaciones, asegurando un seguimiento completo de las modificaciones.
 
-## Descripción
+Estructura de las Tablas
+Tabla usuarios_insert_log
+Registra nuevos usuarios creados.
 
-Taller DB es un proyecto de aplicación web desarrollado con Django, un framework de Python. Este proyecto permite a los usuarios registrarse, iniciar sesión y actualizar sus datos de manera segura.
+Campo	Descripción
+id	Identificador único
+datos_originales	Información del usuario insertado
+fecha_evento	Fecha y hora del evento
+usuario_autenticado	Usuario que realizó la operación
+Tabla usuarios_update_log
+Registra actualizaciones realizadas sobre los usuarios.
 
-## Instalación
+Campo	Descripción
+id	Identificador único
+datos_originales	Información previa a la actualización
+tipo_operacion	Tipo de operación realizada
+fecha_evento	Fecha y hora del evento
+usuario_autenticado	Usuario que realizó la operación
+Tabla usuarios_delete_log
+Registra usuarios eliminados.
 
-Sigue estos pasos para instalar el proyecto:
+Campo	Descripción
+id	Identificador único
+datos_originales	Información del usuario eliminado
+fecha_evento	Fecha y hora del evento
+usuario_autenticado	Usuario que realizó la operación
+Implementación de Triggers
+Trigger de Inserción
+Al crear un nuevo usuario, se registra la información en usuarios_insert_log.
 
-1. Clona el repositorio:
+Trigger de Actualización
+Al modificar un usuario, se registra la información previa en usuarios_update_log.
 
-    ```bash
-    git clone https://github.com/ANDRES-FLORIAN-SALAZAR/TALLER6.git
-    ```
+Trigger de Eliminación
+Al eliminar un usuario, se registra la información en usuarios_delete_log.
 
-2. Crea un entorno virtual:
+Pruebas Funcionales
+Se realizaron pruebas desde la interfaz de Django (y directamente sobre SQL, en caso necesario) para verificar:
 
-    ```bash
-    python -m venv venv
-    ```
+La ejecución correcta de las operaciones (crear, actualizar, eliminar usuarios).
 
-3. Activa el entorno virtual:
+El almacenamiento de datos esperados en las tablas históricas (_log).
 
-    - En Linux/MacOS:
+Ejemplos de Registros
+Tabla usuarios_insert_log
+id	datos_originales	fecha_evento	usuario_autenticado
+1	{"nombre": "Juan"}	2025-04-19 10:00:00	admin
+Tabla usuarios_update_log
+id	datos_originales	tipo_operacion	fecha_evento	usuario_autenticado
+1	{"nombre": "Juan"}	Actualización	2025-04-19 10:10:00	admin
+Tabla usuarios_delete_log
+id	datos_originales	fecha_evento	usuario_autenticado
+1	{"nombre": "Juan"}	2025-04-19 10:20:00	admin
+Dificultades Encontradas y Soluciones
+Manejo de errores en triggers
+Se implementó manejo de transacciones para asegurar consistencia en los datos.
 
-        ```bash
-        source venv/bin/activate
-        ```
-
-    - En Windows:
-
-        ```bash
-        venv\Scripts\activate
-        ```
-
-4. Instala las dependencias necesarias:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-5. Configura la base de datos ejecutando las migraciones:
-
-    ```bash
-    python manage.py migrate
-    ```
-
-## Ejecución
-
-Para ejecutar el proyecto, realiza los siguientes pasos:
-
-1. Activa el entorno virtual:
-
-    - En Linux/MacOS:
-
-        ```bash
-        source venv/bin/activate
-        ```
-
-    - En Windows:
-
-        ```bash
-        venv\Scripts\activate
-        ```
-
-2. Inicia el servidor de desarrollo:
-
-    ```bash
-    python manage.py runserver
-    ```
-
-3. Abre un navegador y accede a `http://127.0.0.1:8000/`.
-
-## Características
-
-* Registro de usuarios con validación de datos.
-* Inicio de sesión seguro.
-* Actualización de datos de usuario.
-* Autenticación y autorización utilizando el sistema integrado de Django.
-* Gestión de sesiones para proteger la información del usuario.
-
-## Notas adicionales
-
-Asegúrate de tener Python 3.8 o superior instalado en tu sistema. Además, verifica que `pip` esté actualizado antes de instalar las dependencias:
-
-```bash
-pip install --upgrade pip
-```
+Captura del usuario autenticado
+Se utilizó una variable de sesión para pasar el usuario desde Django a la base de datos.
